@@ -145,4 +145,3 @@ A simple RESTful API built with Go (Golang) for managing a collection of movies.
 ## Contribution
 Contributions are welcome! Please fork this repository, make your changes, and submit a pull request.
 Feel free to customize and extend this project as needed!
-```
