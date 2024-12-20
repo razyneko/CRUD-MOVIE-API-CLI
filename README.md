@@ -1,4 +1,4 @@
-```markdown
+
 # Movie API
 
 A simple RESTful API built with Go (Golang) for managing a collection of movies. This project demonstrates CRUD operations (Create, Read, Update, Delete) on movie data using the Gorilla Mux router.
