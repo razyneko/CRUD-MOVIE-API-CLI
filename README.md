@@ -1,71 +1,59 @@
-
 # Movie API
 
-A simple RESTful API built with Go (Golang) for managing a collection of movies. This project demonstrates CRUD operations (Create, Read, Update, Delete) on movie data using the Gorilla Mux router.
+A simple REST API for managing a collection of movies. The API allows users to perform CRUD (Create, Read, Update, Delete) operations on movie data stored in an in-memory slice.
 
-## Features
-- Retrieve all movies
-- Retrieve a specific movie by ID
-- Create a new movie
-- Update an existing movie by ID
-- Delete a movie by ID
+---
 
-## Technologies Used
-- **Go (Golang)**: Main programming language
-- **Gorilla Mux**: HTTP router and URL matcher for building RESTful services
-- **JSON**: Data format for request and response
+## **Features**
 
-## Getting Started
+- Fetch all movies
+- Fetch a single movie by ID
+- Add a new movie
+- Update an existing movie
+- Delete a movie
 
-### Prerequisites
-- [Go](https://golang.org/doc/install) installed on your system
+---
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/movie-api.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd movie-api
-   ```
-3. Initialize or ensure Go modules are set up:
-   ```bash
-   go mod tidy
-   ```
+## **Technologies Used**
 
-### Running the Server
-1. Run the application:
-   ```bash
-   go run main.go
-   ```
-2. The server will start at `http://localhost:8000`.
+- **Language:** Go (Golang)
+- **Router:** Gorilla Mux
+- **Data Storage:** In-memory slice (suitable for small projects or testing)
 
-### API Endpoints
+---
 
-#### 1. Get All Movies
-- **Endpoint**: `GET /movies`
-- **Description**: Retrieves all movies in the database.
-- **Response**:
-  ```json
-  [
-    {
-      "id": "1",
-      "isbn": "1234567890",
-      "title": "The Great Adventure",
-      "director": {
-        "firstname": "John",
-        "lastname": "Doe"
-      }
-    }
-  ]
-  ```
+## **Project Structure**
 
-#### 2. Get a Single Movie
-- **Endpoint**: `GET /movies/{id}`
-- **Description**: Retrieves a specific movie by its ID.
-- **Response**:
-  ```json
+```plaintext
+movie-api/
+├── main.go              # Entry point of the application
+├── router/              
+│   └── router.go        # Defines routes
+├── handlers/            
+│   └── movie_handlers.go # Contains handler functions for CRUD operations
+├── models/              
+│   └── movie.go         # Defines Movie and Director structs
+├── data/                
+│   └── seed.go          # Seeds initial movie data
+├── utils/               
+│   └── response.go      # Helper functions for responses (e.g., setting headers)
+├── go.mod               # Go module file
+└── go.sum               # Dependencies file
+```
+
+---
+
+## **Endpoints**
+
+### **Base URL**
+`http://localhost:8000`
+
+### **1. Get All Movies**
+**Endpoint:** `GET /movies`
+
+**Response:**
+```json
+[
   {
     "id": "1",
     "isbn": "1234567890",
@@ -75,73 +63,136 @@ A simple RESTful API built with Go (Golang) for managing a collection of movies.
       "lastname": "Doe"
     }
   }
-  ```
+]
+```
 
-#### 3. Create a Movie
-- **Endpoint**: `POST /movies`
-- **Description**: Adds a new movie to the database.
-- **Request Body**:
-  ```json
+---
+
+### **2. Get a Movie by ID**
+**Endpoint:** `GET /movies/{id}`
+
+**Response (Success):**
+```json
+{
+  "id": "1",
+  "isbn": "1234567890",
+  "title": "The Great Adventure",
+  "director": {
+    "firstname": "John",
+    "lastname": "Doe"
+  }
+}
+```
+
+**Response (Not Found):**
+```json
+"Movie not found"
+```
+
+---
+
+### **3. Create a Movie**
+**Endpoint:** `POST /movies`
+
+**Request Body:**
+```json
+{
+  "isbn": "9876543210",
+  "title": "New Movie",
+  "director": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "id": "123456",
+  "isbn": "9876543210",
+  "title": "New Movie",
+  "director": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  }
+}
+```
+
+---
+
+### **4. Update a Movie**
+**Endpoint:** `PUT /movies/{id}`
+
+**Request Body:**
+```json
+{
+  "isbn": "9876543210",
+  "title": "Updated Movie",
+  "director": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "id": "1",
+  "isbn": "9876543210",
+  "title": "Updated Movie",
+  "director": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  }
+}
+```
+
+---
+
+### **5. Delete a Movie**
+**Endpoint:** `DELETE /movies/{id}`
+
+**Response:**
+```json
+[
   {
-    "isbn": "7894561230",
-    "title": "New Movie Title",
+    "id": "2",
+    "isbn": "2345678901",
+    "title": "Mystery at Dawn",
     "director": {
-      "firstname": "Director Firstname",
-      "lastname": "Director Lastname"
+      "firstname": "Jane",
+      "lastname": "Smith"
     }
   }
-  ```
-- **Response**:
-  ```json
-  {
-    "id": "generated-id",
-    "isbn": "7894561230",
-    "title": "New Movie Title",
-    "director": {
-      "firstname": "Director Firstname",
-      "lastname": "Director Lastname"
-    }
-  }
-  ```
+]
+```
 
-#### 4. Update a Movie
-- **Endpoint**: `PUT /movies/{id}`
-- **Description**: Updates the details of an existing movie by its ID.
-- **Request Body**:
-  ```json
-  {
-    "isbn": "updated-isbn",
-    "title": "Updated Title",
-    "director": {
-      "firstname": "Updated Firstname",
-      "lastname": "Updated Lastname"
-    }
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "id": "1",
-    "isbn": "updated-isbn",
-    "title": "Updated Title",
-    "director": {
-      "firstname": "Updated Firstname",
-      "lastname": "Updated Lastname"
-    }
-  }
-  ```
+---
 
-#### 5. Delete a Movie
-- **Endpoint**: `DELETE /movies/{id}`
-- **Description**: Deletes a movie by its ID.
-- **Response**:
-  ```json
-  [
-    // Updated list of movies
-  ]
-  ```
+## **Setup and Run**
 
+### **Prerequisites**
+- Go installed (version 1.19 or higher)
 
-## Contribution
-Contributions are welcome! Please fork this repository, make your changes, and submit a pull request.
-Feel free to customize and extend this project as needed!
+### **Steps to Run**
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/movie-api.git
+   cd movie-api
+   ```
+
+2. Install dependencies:
+   ```bash
+   go mod tidy
+   ```
+
+3. Run the server:
+   ```bash
+   go run main.go
+   ```
+
+4. Test the API:
+   - Use tools like Postman or curl to test endpoints.
